@@ -28,6 +28,23 @@ def pdf_combiner(pdf_folder, save_folder):
         merger.append(pdf_path)
     merger.write(save_path)
 
+def watermarker(pdf_folder, wtr_path, save_folder):
+    for filename in os.listdir(pdf_folder):
+        pdf_path = f'{pdf_folder}/{filename}'
+        save_path = f'{save_folder}/{filename.split()[0]}_w.pdf'
+
+        template = PyPDF2.PdfFileReader(open(pdf_path, 'rb'))
+        watermarker_pdf = PyPDF2.PdfFileReader(open(wtr_path, 'rb'))
+        writer = PyPDF2.PdfFileWriter()
+
+        for i in range(template.getNumPages()):
+            page = template.getPage(i)
+            page.mergePage(watermarker_pdf.getPage(0))
+            writer.addPage(page)
+
+            with open(save_path, 'wb') as file:
+                writer.write(file)
+
 if __name__ == '__main__':
     print('-----start-----')
 
@@ -42,5 +59,7 @@ if __name__ == '__main__':
     rotatePDF(pdf_folder, save_folder, 90)
 
     pdf_combiner(pdf_folder, save_folder)
+
+    watermarker(pdf_folder, 'wtr.pdf', save_folder)
 
 
