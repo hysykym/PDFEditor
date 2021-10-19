@@ -28,13 +28,13 @@ def pdf_combiner(pdf_folder, save_folder):
         merger.append(pdf_path)
     merger.write(save_path)
 
-def watermarker(pdf_folder, wtr_path, save_folder):
+def watermarker(pdf_folder, wtr, save_folder):
     for filename in os.listdir(pdf_folder):
         pdf_path = f'{pdf_folder}/{filename}'
         save_path = f'{save_folder}/{filename.split()[0]}_w.pdf'
 
         template = PyPDF2.PdfFileReader(open(pdf_path, 'rb'))
-        watermarker_pdf = PyPDF2.PdfFileReader(open(wtr_path, 'rb'))
+        watermarker_pdf = PyPDF2.PdfFileReader(open(wtr, 'rb'))
         writer = PyPDF2.PdfFileWriter()
 
         for i in range(template.getNumPages()):
@@ -52,6 +52,7 @@ if __name__ == '__main__':
 
     pdf_folder = './pdf'
     save_folder = './new'
+    wtr = 'wtr.pdf'
 
     check_folder(pdf_folder)
     check_folder(save_folder)
@@ -60,6 +61,6 @@ if __name__ == '__main__':
 
     pdf_combiner(pdf_folder, save_folder)
 
-    watermarker(pdf_folder, 'wtr.pdf', save_folder)
+    watermarker(pdf_folder, wtr, save_folder)
 
 
